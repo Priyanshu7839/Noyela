@@ -1,15 +1,26 @@
 import { useState } from 'react'
 import { ModuleTabs, AIInsight, ScoreRing, StatTile, ProgressBar, MatchBadge, StepCircle } from '../components/ui'
+import SkinIconPack5 from '../assets/SkinIconPack5.png'
+import SkinIconPack14 from '../assets/SkinIconPack14.jpeg'
+import SkinIconPack12 from '../assets/SkinIconPack12.jpeg'
+import SkinIconPack13 from '../assets/SkinIconPack13.jpeg'
+import SkinIconPack10 from '../assets/SkinIconPack10.png'
+import JawlineBanner from '../assets/JawlineBanner.jpeg'
+import { Bell } from 'lucide-react'
+
 
 type NavigateFn = (screen: string) => void
 
 const JAWLINE_TABS = [
-  { id: 'overview', label: 'Overview', icon: '📋' },
-  { id: 'plan', label: 'Plan', icon: '🎯' },
-  { id: 'treatments', label: 'Treatments', icon: '💉' },
-  { id: 'exercises', label: 'Exercises', icon: '🏋' },
-  { id: 'progress', label: 'Progress', icon: '📈' },
+  { id: 'overview', label: 'Overview', img:SkinIconPack5 },
+  { id: 'plan', label: 'Plan', img: SkinIconPack12 },
+  { id: 'treatments', label: 'Treatments', img: SkinIconPack13 },
+  { id: 'exercises', label: 'Exercises', img: SkinIconPack14 },
+  { id: 'progress', label: 'Progress', img:SkinIconPack10 },
 ]
+
+
+
 
 const TREATMENTS = [
   { name: 'Jaw Filler (Radiesse)', match: 91, type: 'Non-invasive', why: 'Best match for soft jawline definition', timeline: '2–4 weeks onset', downtime: '24–48h swelling', invasiveness: 'Low', price: '$800–1,500', longevity: '12–18 months', pain: 'Minimal' },
@@ -247,19 +258,39 @@ function JawlineProgress() {
   )
 }
 
-export default function Jawline({ screen, navigate, activeModule, onModuleChange }: {
-  screen: string; navigate: NavigateFn; activeModule: string; onModuleChange: (m: string) => void
+export default function Jawline({ screen, navigate, activeModule, onModuleChange, onHamburger, onNotif }: {
+  screen: string; navigate: NavigateFn; activeModule: string; onModuleChange: (m: string) => void;
+  onHamburger: () => void; onNotif: () => void
 }) {
   const tab = screen.replace('jawline-', '')
   const setTab = (t: string) => navigate(`jawline-${t}`)
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+
+       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 16px 8px', background: 'white' }}>
+        <div style={{ width: 44 }}>
+          <button onClick={onHamburger} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 4 }}>
+            <svg width="22" height="16" viewBox="0 0 22 16" fill="none"><rect y="0" width="22" height="2" rx="1" fill="var(--text)" /><rect y="7" width="16" height="2" rx="1" fill="var(--text)" /><rect y="14" width="22" height="2" rx="1" fill="var(--text)" /></svg>
+          </button>
+        </div>
+        <div style={{ textAlign: 'center' }}>
+          <div style={{ fontFamily: "'Inter', sans-serif", fontWeight: 700, fontSize: 16, letterSpacing: '0.22em', color: 'var(--text)', lineHeight: 1 }}>NOYELA</div>
+          <div style={{ fontFamily: "'Playfair Display'", fontStyle: 'italic', fontSize: 10, color: 'var(--text-2)', letterSpacing: '0.01em', marginTop: 2 }}>Your Personalized Aesthetic Intelligence</div>
+        </div>
+        <div style={{ width: 44, display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: 10 }}>
+       
+
+          <Bell color='#000' size={24} onClick={onNotif}/>
+          
+        </div>
+      </div>
       <ModuleTabs active={activeModule} onChange={m => { onModuleChange(m); navigate(`${m}-overview`) }} />
+        <img src={JawlineBanner} alt="" />
       <div style={{ display: 'flex', gap: 0, overflowX: 'auto', background: 'white', borderBottom: '1px solid var(--border)' }}>
         {JAWLINE_TABS.map(t => (
           <button key={t.id} onClick={() => setTab(t.id)} className={`feature-tab ${tab === t.id ? 'active' : ''}`} style={{ background: 'none', border: 'none', cursor: 'pointer', fontFamily: "'Inter', sans-serif" }}>
-            {t.icon} {t.label}
+              <img src={t.img} alt=""  className='w-[25%]'/> {t.label}
           </button>
         ))}
       </div>

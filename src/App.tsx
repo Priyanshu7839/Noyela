@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react'
-import { BottomNav, NoyelaHeader, HamburgerDrawer } from './components/ui'
+import { useState, useEffect, useRef } from 'react'
+import { BottomNav, NoyelaHeader, HamburgerDrawer, NoyelaOrb, ChevronRight } from './components/ui'
 import Auth from './screens/Auth'
 import Home from './screens/Home'
 import AskNoyela from './screens/AskNoyela'
@@ -12,10 +12,20 @@ import Roadmap from './screens/Roadmap'
 import Progress from './screens/Progress'
 import Doctors from './screens/Doctors'
 import Account from './screens/Account'
+import { getCurrentUser, needsProfileCompletion } from './lib/auth'
+import { Mic, Paperclip, Send } from 'lucide-react'
+import { WaveformBars } from './components/NoyelaOrb'
+
+import QuickActionsImg1 from './assets/QuickActionsImg1.png'
+import QuickActionsImg2 from './assets/QuickActionsImg2.png'
+import QuickActionsImg3 from './assets/QuickActionsImg3.png'
+import QuickActionsImg4 from './assets/QuickActionsImg4.png'
+
+
 
 type Screen = string
 
-const AUTH_SCREENS = ['splash', 'onboarding-1', 'onboarding-2', 'onboarding-3', 'auth', 'personalization']
+const AUTH_SCREENS = ['splash', 'onboarding-1', 'onboarding-2', 'onboarding-3', 'auth', 'profile-completion', 'personalization']
 const PLAN_SCREENS = ['skin', 'hair', 'jawline', 'sleep', 'nutrition']
 
 function getNavActive(screen: Screen): string {
@@ -29,11 +39,42 @@ function getNavActive(screen: Screen): string {
   return 'home'
 }
 
+
+
 export default function App() {
+
+
   const [screen, setScreen] = useState<Screen>('splash')
   const [params, setParams] = useState<Record<string, unknown>>({})
   const [drawerOpen, setDrawerOpen] = useState(false)
   const [activeModule, setActiveModule] = useState('skin')
+
+  
+
+  useEffect(() => {
+    let active = true
+
+    const restoreAuthenticatedSession = async () => {
+      try {
+        // getUser validates/refreshes the persisted Supabase token with Auth.
+        const user = await getCurrentUser()
+        if (!user || !active) return
+        try {
+          const profileIncomplete = await needsProfileCompletion(user)
+          if (active) setScreen(profileIncomplete ? 'profile-completion' : 'home')
+        } catch {
+          // A session remains valid even if the profile migration has not yet
+          // been applied; do not strand an authenticated user on the auth page.
+          if (active) setScreen('home')
+        }
+      } catch {
+        // No valid saved session: leave the splash/auth journey unchanged.
+      }
+    }
+
+    void restoreAuthenticatedSession()
+    return () => { active = false }
+  }, [])
 
   const navigate = (s: Screen, newParams?: Record<string, unknown>) => {
     setScreen(s)
@@ -51,6 +92,8 @@ export default function App() {
   const showHeader = !isAuthScreen && !PLAN_SCREENS.some(p => screen.startsWith(p)) && !screen.startsWith('roadmap') && screen !== 'ask-noyela' && screen !== 'progress'
   const showPlanHeader = PLAN_SCREENS.some(p => screen.startsWith(p))
 
+  
+
   const handleNavNavigate = (id: string) => {
     if (id === 'home') navigate('home')
     else if (id === 'plan') navigate(`${activeModule}-overview`)
@@ -61,7 +104,10 @@ export default function App() {
   // Render screens that have their own full-page layout
   if (isAuthScreen) {
     return (
-      <div className="app-shell">
+      <div
+      
+     className="app-shell ">
+    
         <Auth screen={screen} navigate={navigate} />
       </div>
     )
@@ -69,8 +115,14 @@ export default function App() {
 
   if (screen === 'ask-noyela') {
     return (
-      <div className="app-shell">
-        <AskNoyela navigate={navigate} />
+      <div 
+      style={{
+    paddingTop: 'env(safe-area-inset-top)'
+  }}
+      className="app-shell">
+
+       
+        <AskNoyela navigate={navigate} params={params} />
       </div>
     )
   }
@@ -78,7 +130,11 @@ export default function App() {
   // Face screens
   if (screen.startsWith('face-')) {
     return (
-      <div className="app-shell">
+      <div 
+      style={{
+    paddingTop: 'env(safe-area-inset-top)',background: 'var(--bg)'
+  }}
+      className="app-shell pb-[90px]">
         <div className="screen">
           <Face screen={screen} navigate={navigate} />
         </div>
@@ -89,18 +145,26 @@ export default function App() {
   // Booking/doctors that have their own internal nav
   if (['doctor-profile', 'booking', 'booking-confirm', 'booking-review', 'treatment-detail'].includes(screen)) {
     return (
-      <div className="app-shell">
+      <div 
+      style={{
+    paddingTop: 'env(safe-area-inset-top)'
+  }}
+      className="app-shell">
         <Doctors screen={screen} navigate={navigate} params={params} />
       </div>
     )
   }
 
   // Main app shell with header + bottom nav
+
+
+
+
   const renderScreen = () => {
     // Plan screens
     if (screen.startsWith('skin-')) return <Skin screen={screen} navigate={navigate} activeModule={activeModule} onModuleChange={setActiveModule} onHamburger={() => setDrawerOpen(true)} onNotif={() => navigate('notifications')} />
-    if (screen.startsWith('hair-')) return <Hair screen={screen} navigate={navigate} activeModule={activeModule} onModuleChange={setActiveModule} />
-    if (screen.startsWith('jawline-')) return <Jawline screen={screen} navigate={navigate} activeModule={activeModule} onModuleChange={setActiveModule} />
+    if (screen.startsWith('hair-')) return <Hair screen={screen} navigate={navigate} activeModule={activeModule} onModuleChange={setActiveModule} onHamburger={() => setDrawerOpen(true)} onNotif={() => navigate('notifications')}/>
+    if (screen.startsWith('jawline-')) return <Jawline screen={screen} navigate={navigate} activeModule={activeModule} onModuleChange={setActiveModule} onHamburger={() => setDrawerOpen(true)} onNotif={() => navigate('notifications')}/>
     if (screen === 'sleep' || screen === 'nutrition' || screen === 'supplements') return <SleepNutrition screen={screen} navigate={navigate} activeModule={activeModule} onModuleChange={setActiveModule} />
 
     if (screen === 'home') return <Home navigate={navigate} />
@@ -121,8 +185,16 @@ export default function App() {
   // Screens that handle their own header via BackHeader inside
   const noHeader = isAccount || isDoctors
 
+
+
+
+
   return (
-    <div className="app-shell real">
+    <div 
+    style={{
+    paddingTop: 'env(safe-area-inset-top)',background: 'var(--bg)'
+  }}
+    className="app-shell real pb-[90px]">
       {/* Global header — only on home and plan screens with no back button */}
       {!isPlanScreen && !noHeader && (
         <NoyelaHeader
@@ -131,6 +203,8 @@ export default function App() {
           showSubtitle={false}
         />
       )}
+
+
 
       {/* Screen content */}
       <div style={{ flex: 1, overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>

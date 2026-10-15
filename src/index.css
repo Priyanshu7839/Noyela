@@ -57,7 +57,7 @@ body {
 }
 
 @keyframes orb-pulse {
-  0%, 100% { opacity: 0.6; transform: scale(1); }
+  0%, 100% { opacity: 0.8; transform: scale(1); }
   50% { opacity: 1; transform: scale(1.08); }
 }
 
@@ -92,6 +92,23 @@ body {
   100% { top: 100%; opacity: 0.8; }
 }
 
+@keyframes face-scan-line {
+  0% { top: 0%; opacity: 0.25; }
+  15%, 85% { opacity: 1; }
+  100% { top: calc(100% - 2px); opacity: 0.25; }
+}
+
+@keyframes face-guidance-arrow {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(var(--arrow-shift, 7px)); }
+}
+
+.face-scan-beam { position: absolute; left: 0; animation: face-scan-line 1000ms ease-in-out forwards; }
+.face-guidance-arrow { animation: face-guidance-arrow 1.1s ease-in-out infinite; }
+@media (prefers-reduced-motion: reduce) {
+  .face-scan-beam, .face-guidance-arrow { animation: none; }
+}
+
 .animate-orb-breathe { animation: orb-breathe 3s ease-in-out infinite; }
 .animate-orb-pulse { animation: orb-pulse 2s ease-in-out infinite; }
 .animate-fade-up { animation: fade-up 0.4s ease-out forwards; }
@@ -100,12 +117,12 @@ body {
 .app-shell {
   max-width: 430px;
   margin: 0 auto;
-  min-height: 100vh;
-  background: var(--bg);
+  height: 100vh;
   position: relative;
   overflow: hidden;
   display: flex;
   flex-direction: column;
+
 }
 
 .screen {
@@ -113,7 +130,8 @@ body {
   overflow-y: auto;
   overflow-x: hidden;
   -webkit-overflow-scrolling: touch;
-  padding-bottom: 90px;
+  
+  
 
 }
 
@@ -190,23 +208,23 @@ body {
   align-items: center;
   gap: 4px;
   padding: 3px 10px;
-  border-radius: 50px;
+  border-radius: 7px;
   font-size: 10px;
   font-weight: 500;
   letter-spacing: 0.02em;
 }
 
-.badge-noyela { border:1px solid #6B35C8; color: var(--purple); }
-.badge-value { border:1px solid #15803D; color: #15803D; }
-.badge-budget { border:1px solid #92400E; color: #92400E; }
-.badge-selected { border:1px solid #15803D; color: #15803D; border: 1px solid #86EFAC; }
-.badge-premium { border:1px solid #6B35C8; color: var(--purple); }
+.badge-noyela { border:1px solid #6B35C81a; color: var(--purple); }
+.badge-value { border:1px solid #15803D1a; color: #15803D; }
+.badge-budget { border:1px solid #92400E1a; color: var(--amber); }
+.badge-selected { border:1px solid #15803D1a; color: #15803D; border: 1px solid #86EFAC; }
+.badge-premium { border:1px solid #6B35C81a; color: var(--purple); }
 
 .bottom-nav {
   display: flex;
   align-items: center;
-  justify-content: space-around;
-  padding: 10px 0 20px;
+  justify-content: space-between;
+  padding: 10px 15px 20px;
   background: white;
   border-top: 1px solid var(--border);
   position: fixed;

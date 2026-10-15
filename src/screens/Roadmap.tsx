@@ -1,32 +1,38 @@
 import { useState } from 'react'
 import { BackHeader, NoyelaOrb, AIInsight, ProgressBar, ScoreRing } from '../components/ui'
+import RoadmapBanner from '../assets/RoadmapBanner.jpeg'
+import RoadmapImg1 from '../assets/RoadmapImg1.jpeg'
+import RoadmapImg2 from '../assets/RoadmapImg2.jpeg'
+import RoadmapImg3 from '../assets/RoadmapImg3.jpeg'
+import RoadmapImg4 from '../assets/RoadmapImg4.jpeg'
+import RoadmapImg5 from '../assets/RoadmapImg5.jpeg'
 
 type NavigateFn = (screen: string) => void
 
 const ROADMAP_TABS = ['Today', 'Journey', 'Timeline']
 
 const TODAY_ACTIONS = [
-  { priority: 1, icon: '☀', label: 'Complete morning skin routine', module: 'Skin', done: true, time: '5 min', navigate: 'skin-morning' },
-  { priority: 2, icon: '🏋', label: 'Jawline exercises · 3 sets', module: 'Jawline', done: false, time: '15 min', navigate: 'jawline-exercises' },
-  { priority: 3, icon: '💧', label: 'Apply minoxidil (evening)', module: 'Hair', done: false, time: '2 min', navigate: 'hair-night' },
-  { priority: 4, icon: '🌙', label: 'Target bedtime: 10:45 PM', module: 'Sleep', done: false, time: 'Reminder', navigate: 'sleep' },
-  { priority: 5, icon: '🥗', label: 'Reach 160g protein target', module: 'Nutrition', done: false, time: 'Ongoing', navigate: 'nutrition' },
+  { priority: 1, img: RoadmapImg3, label: 'Complete morning skin routine', module: 'Skin', done: true, time: '5 min', navigate: 'skin-morning' },
+  { priority: 2,  img: RoadmapImg2,label: 'Jawline exercises · 3 sets', module: 'Jawline', done: false, time: '15 min', navigate: 'jawline-exercises' },
+  { priority: 3,  img: RoadmapImg4, label: 'Apply minoxidil (evening)', module: 'Hair', done: false, time: '2 min', navigate: 'hair-night' },
+  { priority: 4,  img: RoadmapImg5, label: 'Target bedtime: 10:45 PM', module: 'Sleep', done: false, time: 'Reminder', navigate: 'sleep' },
+  { priority: 5,  img: RoadmapImg1,label: 'Reach 160g protein target', module: 'Nutrition', done: false, time: 'Ongoing', navigate: 'nutrition' },
 ]
 
 const JOURNEY_PHASES = [
   {
-    phase: 1, name: 'Foundation', status: 'completed', dateRange: 'Jun 14 – Jul 14',
+    phase: 1, name: 'Foundation', status: 'completed', dateRange: 'Aug 16 – Sep 16',
     desc: 'Establish baseline routines and complete initial assessments.',
     milestones: ['Face harmony assessment', 'Skin routine established', 'Hair protocol started', 'First PRP consultation'],
   },
   {
-    phase: 2, name: 'Elevate', status: 'active', dateRange: 'Jul 15 – Oct 15',
+    phase: 2, name: 'Elevate', status: 'active', dateRange: 'Sep 16 – Oct 16',
     desc: 'Introduce advanced treatments and optimize existing protocols.',
     milestones: ['First PRP session ✓', 'Jawline exercise protocol', 'Introduce retinol', 'Vitamin C serum →'],
     progress: 27,
   },
   {
-    phase: 3, name: 'Refine', status: 'upcoming', dateRange: 'Oct 16 – Jan 16',
+    phase: 3, name: 'Refine', status: 'upcoming', dateRange: 'Oct 16 – Nov 16',
     desc: 'Fine-tune results and address remaining opportunities.',
     milestones: ['Advanced assessment', 'Treatment evaluation', 'Routine optimization', 'Progress photography'],
   },
@@ -38,13 +44,13 @@ const JOURNEY_PHASES = [
 ]
 
 const TIMELINE_ITEMS = [
-  { date: 'Aug 8', label: 'Today', type: 'today', items: ['Morning routine', 'Jawline exercises', 'Minoxidil PM'] },
-  { date: 'Aug 10', label: 'Vitamin C serum intro', type: 'upcoming', items: ['Add C-vitamin to AM routine'] },
-  { date: 'Aug 15', label: 'Skin photo assessment', type: 'upcoming', items: ['8-week progress photo'] },
-  { date: 'Sep 2', label: 'PRP Session #2', type: 'upcoming', items: ['Dr. Michael Torres · 10:00 AM'] },
-  { date: 'Jul 28', label: 'PRP Session #1', type: 'completed', items: ['Dr. Michael Torres · successful'] },
-  { date: 'Jul 15', label: 'Phase 2 started', type: 'completed', items: ['Jawline protocol began', 'Retinol introduced'] },
-  { date: 'Jun 14', label: 'Noyela journey started', type: 'completed', items: ['Face scan', 'Skin assessment', 'Hair protocol'] },
+  { date: 'Aug 15', label: 'Noyela journey started', type: 'completed', items: ['Face scan', 'Skin assessment', 'Hair protocol'] },
+  { date: 'Aug 16', label: 'Today', type: 'today', items: ['Morning routine', 'Jawline exercises', 'Minoxidil PM'] },
+  { date: 'Aug 30', label: 'Vitamin C serum intro', type: 'upcoming', items: ['Add C-vitamin to AM routine'] },
+  { date: 'Sep 15', label: 'Skin photo assessment', type: 'upcoming', items: ['8-week progress photo'] },
+  { date: 'Sep 28', label: 'PRP Session #1', type: 'completed', items: ['Dr. Michael Torres · successful'] },
+  { date: 'Nov 12', label: 'PRP Session #2', type: 'upcoming', items: ['Dr. Michael Torres · 10:00 AM'] },
+  { date: 'Nov 16', label: 'Phase 3 started', type: 'completed', items: ['Jawline protocol began', 'Retinol introduced'] },
 ]
 
 export default function Roadmap({ screen, navigate }: { screen: string; navigate: NavigateFn }) {
@@ -55,10 +61,10 @@ export default function Roadmap({ screen, navigate }: { screen: string; navigate
       <div style={{ background: 'var(--bg)', padding: '16px 16px 0' }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
           <div>
-            <h2 style={{ fontFamily: "'Playfair Display'", fontSize: 24, fontWeight: 700, margin: 0, color: 'var(--text)' }}>Your Roadmap</h2>
+            <h2 style={{ fontFamily: "'Playfair Display'", fontSize: 28, fontWeight: 500, margin: 0, color: 'var(--text)' }}>Your Roadmap</h2>
             <p style={{ fontSize: 13, color: 'var(--text-2)', margin: '4px 0 0' }}>Phase 2 · Enhancement · Day 24</p>
           </div>
-          <ScoreRing score={35} size={60} label="%" />
+          <ScoreRing score={35} size={80} label="%" />
         </div>
         <div style={{ display: 'flex', background: 'var(--purple-pale)', borderRadius: 50, padding: 3, marginBottom: 12 }}>
           {ROADMAP_TABS.map(t => (
@@ -74,11 +80,11 @@ export default function Roadmap({ screen, navigate }: { screen: string; navigate
           <div style={{ padding: '0 16px' }}>
             {/* Transformation hero */}
             <div style={{ borderRadius: 20, overflow: 'hidden', position: 'relative', height: 160, marginBottom: 16, background: 'linear-gradient(135deg, #EDE9F8, #F5F2FF)' }}>
-              <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=200&fit=crop&auto=format" alt="Transformation" style={{ position: 'absolute', right: 0, top: 0, height: '100%', width: '55%', objectFit: 'cover', objectPosition: 'top' }} />
+              <img src={RoadmapBanner} alt="Transformation" style={{ position: 'absolute', right: 0, top: 0, height: '100%', width: '60%', objectFit: 'cover', objectPosition: 'top' }} />
               <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(90deg, rgba(237,233,248,1) 40%, transparent 70%)' }} />
               <div style={{ position: 'absolute', padding: '20px' }}>
                 <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.1em', color: 'var(--purple)', marginBottom: 6 }}>TODAY'S FOCUS</div>
-                <h3 style={{ fontFamily: "'Playfair Display'", fontSize: 20, fontWeight: 700, color: 'var(--text)', margin: '0 0 6px', lineHeight: 1.2 }}>Consistency builds<br />transformation.</h3>
+                <h3 style={{ fontFamily: "'Playfair Display'", fontSize: 24, fontWeight: 500, color: 'var(--text)', margin: '0 0 6px', lineHeight: 1.2 }}>Consistency Builds<br />Transformation.</h3>
                 <p style={{ fontSize: 13, color: 'var(--text-2)', margin: 0 }}>3 of 5 actions remaining.</p>
               </div>
             </div>
@@ -91,10 +97,12 @@ export default function Roadmap({ screen, navigate }: { screen: string; navigate
               </div>
               {TODAY_ACTIONS.map((a, i) => (
                 <div key={i} onClick={() => navigate(a.navigate)} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '13px 16px', background: 'white', borderRadius: 14, marginBottom: 8, border: `1.5px solid ${a.done ? 'var(--green)' : 'var(--border)'}`, cursor: 'pointer', transition: 'border-color 0.2s', opacity: a.done ? 0.7 : 1 }}>
-                  <div style={{ width: 40, height: 40, borderRadius: 12, background: a.done ? 'var(--green-bg)' : 'var(--purple-light)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 18, flexShrink: 0 }}>{a.icon}</div>
+                  <div className='p-2' style={{ width: 48, height: 48, borderRadius: 14, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 20, margin: '0 auto 6px', border:a.done?'1px solid rgba(107,53,200,0.15)': '1px solid rgba(107,53,200,0.15)' }}>
+                <img src={a.img} alt="" />
+                  </div>
                   <div style={{ flex: 1 }}>
                     <div style={{ fontWeight: 600, fontSize: 14, textDecoration: a.done ? 'line-through' : 'none', color: a.done ? 'var(--text-3)' : 'var(--text)' }}>{a.label}</div>
-                    <div style={{ fontSize: 11, color: 'var(--text-3)' }}>{a.module} · {a.time}</div>
+                    <div style={{ fontSize: 11, color:a.done ?'var(--text-3)': 'var(--text-3)' }}>{a.module} · {a.time}</div>
                   </div>
                   {a.done ? <span style={{ color: 'var(--green)', fontSize: 18 }}>✓</span> : <span style={{ color: 'var(--text-3)', fontSize: 16 }}>›</span>}
                 </div>

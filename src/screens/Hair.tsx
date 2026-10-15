@@ -1,17 +1,31 @@
 import { useState } from 'react'
 import { ModuleTabs, AIInsight, ScoreRing, StatTile, ProgressBar, NoyelaOrb, TierBadge, MatchBadge, StepCircle } from '../components/ui'
+import SkinIconPack5 from '../assets/SkinIconPack5.png'
+import SkinIconPack6 from '../assets/SkinIconPack6.png'
+import SkinIconPack7 from '../assets/SkinIconPack7.png'
+import SkinIconPack9 from '../assets/SkinIconPack9.png'
+import SkinIconPack10 from '../assets/SkinIconPack10.png'
+import SkinIconPack11 from '../assets/SkinIconPack11.png'
+import SkinIconPack13 from '../assets/SkinIconPack13.jpeg'
+import SkinIconPack14 from '../assets/SkinIconPack14.jpeg'
+import { Bell, HardHat, Pipette, Syringe } from 'lucide-react'
+import HairBanner from '../assets/HairBanner.jpeg'
+
 
 type NavigateFn = (screen: string) => void
 
 const HAIR_TABS = [
-  { id: 'overview', label: 'Overview', icon: '📋' },
-  { id: 'products', label: 'Products', icon: '🧴' },
-  { id: 'morning', label: 'Morning', icon: '☀' },
-  { id: 'night', label: 'Night', icon: '🌙' },
-  { id: 'professional', label: 'Treatments', icon: '🏥' },
-  { id: 'devices', label: 'Devices', icon: '🔬' },
-  { id: 'progress', label: 'Progress', icon: '📈' },
+  { id: 'overview', label: 'Overview', img:SkinIconPack5 },
+  { id: 'products', label: 'Products',  img:SkinIconPack6 },
+  { id: 'morning', label: 'Morning', img:SkinIconPack7 },
+  { id: 'night', label: 'Night', img:SkinIconPack9},
+  { id: 'professional', label: 'Treatments', img: SkinIconPack13 },
+  { id: 'devices', label: 'Devices', img: SkinIconPack14},
+  { id: 'progress', label: 'Progress', img:SkinIconPack10  },
 ]
+
+
+
 
 const HAIR_PRODUCTS = [
   {
@@ -45,13 +59,13 @@ const AT_HOME_DEVICES = [
   { name: 'Theradome EVO LH80 PRO', type: 'LLLT Helmet', match: 85, price: '$895', desc: '80 proprietary lasers. Full coverage. 20-min sessions 2x/week.', img: '⛑' },
 ]
 
-function HairOverview({ navigate }: { navigate: NavigateFn }) {
+export function HairOverview({ navigate }: { navigate: NavigateFn }) {
   return (
     <div style={{ paddingBottom: 24 }}>
       <div style={{ padding: '0 16px' }}>
         <div style={{ background: 'linear-gradient(135deg, var(--purple-light), white)', borderRadius: 20, padding: '20px', marginBottom: 16, border: '1px solid rgba(107,53,200,0.1)' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 16 }}>
-            <ScoreRing score={68} size={80} label="/100" />
+            {/* <ScoreRing score={68} size={80} label="/100" /> */}
             <div>
               <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.1em', color: 'var(--purple)' }}>HAIR HEALTH</div>
               <h3 style={{ fontFamily: "'Playfair Display'", fontSize: 20, fontWeight: 700, margin: '4px 0 6px', color: 'var(--text)' }}>Early intervention pays off</h3>
@@ -86,12 +100,14 @@ function HairOverview({ navigate }: { navigate: NavigateFn }) {
 
         <div style={{ marginTop: 16, background: 'white', borderRadius: 18, border: '1px solid var(--border)', overflow: 'hidden' }}>
           {[
-            { label: 'Next action', value: 'Apply minoxidil tonight', icon: '💧' },
-            { label: 'PRP Session', value: 'Sep 2, 2026 · Dr. Torres', icon: '🏥' },
-            { label: 'Device session', value: 'iRestore · 25 min tonight', icon: '🔴' },
+            { label: 'Next action', value: 'Apply minoxidil tonight', icon: <Pipette color='#6B35C8' strokeWidth={1}/> },
+            { label: 'PRP Session', value: 'Sep 2, 2026 · Dr. Torres', icon: <Syringe color='black' strokeWidth={1}/> },
+            { label: 'Device session', value: 'iRestore · 25 min tonight', icon: <HardHat color='#F44336' strokeWidth={1}/>},
           ].map((item, i) => (
             <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '13px 16px', borderBottom: i < 2 ? '1px solid var(--border)' : 'none' }}>
-              <span style={{ fontSize: 20, width: 28, textAlign: 'center' }}>{item.icon}</span>
+               <div className='p-2' style={{ width: 48, height: 48, borderRadius: 14, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 20, margin: '0 auto 6px', border: '1px solid rgba(107,53,200,0.15)' }}>
+                {item.icon}
+                  </div>
               <div style={{ flex: 1 }}>
                 <div style={{ fontSize: 11, color: 'var(--text-3)', fontWeight: 500 }}>{item.label}</div>
                 <div style={{ fontSize: 14, fontWeight: 600, color: 'var(--text)' }}>{item.value}</div>
@@ -105,7 +121,7 @@ function HairOverview({ navigate }: { navigate: NavigateFn }) {
   )
 }
 
-function HairProducts() {
+export function HairProducts() {
   const [selected, setSelected] = useState<Record<number, number>>({ 1: 1, 2: 1 })
   return (
     <div style={{ paddingBottom: 24 }}>
@@ -139,7 +155,7 @@ function HairProducts() {
   )
 }
 
-function HairMorning() {
+export function HairMorning() {
   const steps = [
     { n: 1, title: 'Scalp Check', desc: 'Assess shedding — count hairs on pillow.' },
     { n: 2, title: 'Gentle Shampoo', desc: '3× per week only. Over-washing strips scalp oils.' },
@@ -167,7 +183,7 @@ function HairMorning() {
   )
 }
 
-function HairNight() {
+export function HairNight() {
   const steps = [
     { n: 1, title: 'Minoxidil Application', desc: 'Apply 1ml to dry scalp. Massage in. Leave on overnight.', note: 'Critical: do not skip. Consistency = results.' },
     { n: 2, title: 'Scalp Serum', desc: 'Apply The INKEY List Peptide Treatment. Focus on temples.', note: "✦ Noyela's Pick for your profile" },
@@ -195,7 +211,7 @@ function HairNight() {
   )
 }
 
-function HairProfessional({ navigate }: { navigate: NavigateFn }) {
+export function HairProfessional({ navigate }: { navigate: NavigateFn }) {
   const [treatmentTab, setTreatmentTab] = useState('Recommended')
   const tabs = ['Recommended', 'Non-invasive', 'Clinical']
   return (
@@ -245,7 +261,7 @@ function HairProfessional({ navigate }: { navigate: NavigateFn }) {
   )
 }
 
-function HairDevices() {
+export function HairDevices() {
   return (
     <div style={{ paddingBottom: 24 }}>
       <div style={{ padding: '0 16px' }}>
@@ -273,7 +289,7 @@ function HairDevices() {
   )
 }
 
-function HairProgress() {
+export function HairProgress() {
   return (
     <div style={{ paddingBottom: 24 }}>
       <div style={{ padding: '0 16px' }}>
@@ -315,19 +331,39 @@ function HairProgress() {
   )
 }
 
-export default function Hair({ screen, navigate, activeModule, onModuleChange }: {
-  screen: string; navigate: NavigateFn; activeModule: string; onModuleChange: (m: string) => void
+export default function Hair({ screen, navigate, activeModule, onModuleChange, onHamburger, onNotif }: {
+  screen: string; navigate: NavigateFn; activeModule: string; onModuleChange: (m: string) => void;
+  onHamburger: () => void; onNotif: () => void
 }) {
   const tab = screen.replace('hair-', '')
   const setTab = (t: string) => navigate(`hair-${t}`)
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 16px 8px', background: 'white' }}>
+        <div style={{ width: 44 }}>
+          <button onClick={onHamburger} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 4 }}>
+            <svg width="22" height="16" viewBox="0 0 22 16" fill="none"><rect y="0" width="22" height="2" rx="1" fill="var(--text)" /><rect y="7" width="16" height="2" rx="1" fill="var(--text)" /><rect y="14" width="22" height="2" rx="1" fill="var(--text)" /></svg>
+          </button>
+        </div>
+        <div style={{ textAlign: 'center' }}>
+          <div style={{ fontFamily: "'Inter', sans-serif", fontWeight: 700, fontSize: 16, letterSpacing: '0.22em', color: 'var(--text)', lineHeight: 1 }}>NOYELA</div>
+          <div style={{ fontFamily: "'Playfair Display'", fontStyle: 'italic', fontSize: 10, color: 'var(--text-2)', letterSpacing: '0.01em', marginTop: 2 }}>Your Personalized Aesthetic Intelligence</div>
+        </div>
+        <div style={{ width: 44, display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: 10 }}>
+       
+
+          <Bell color='#000' size={24} />
+          
+        </div>
+      </div>
       <ModuleTabs active={activeModule} onChange={m => { onModuleChange(m); navigate(`${m}-overview`) }} />
+        <img src={HairBanner} alt="" />
       <div style={{ display: 'flex', gap: 0, overflowX: 'auto', background: 'white', borderBottom: '1px solid var(--border)' }}>
         {HAIR_TABS.map(t => (
           <button key={t.id} onClick={() => setTab(t.id)} className={`feature-tab ${tab === t.id ? 'active' : ''}`} style={{ background: 'none', border: 'none', cursor: 'pointer', fontFamily: "'Inter', sans-serif" }}>
-            {t.icon} {t.label}
+             <img src={t.img} alt=""  className='w-[25%]'/> {t.label}
           </button>
         ))}
       </div>

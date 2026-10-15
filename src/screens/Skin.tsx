@@ -1,12 +1,14 @@
 import { useState } from 'react'
 import { BackHeader, ModuleTabs, AIInsight, ScoreRing, StatTile, ProgressBar, NoyelaOrb, TierBadge, CheckCircleIcon, StepCircle } from '../components/ui'
-import { Bell } from 'lucide-react'
+import { Bell, Droplets, Sun } from 'lucide-react'
 import SkinIconPack5 from '../assets/SkinIconPack5.png'
 import SkinIconPack6 from '../assets/SkinIconPack6.png'
 import SkinIconPack7 from '../assets/SkinIconPack7.png'
 import SkinIconPack8 from '../assets/SkinIconPack8.png'
 import SkinIconPack9 from '../assets/SkinIconPack9.png'
 import SkinIconPack10 from '../assets/SkinIconPack10.png'
+
+import SkinBanner from '../assets/SkinBanner.jpeg'
 
 type NavigateFn = (screen: string, params?: Record<string, unknown>) => void
 
@@ -93,15 +95,15 @@ const NIGHT_STEPS = [
 // ─── Overview ─────────────────────────────────────────────────────────────────
 function SkinOverview({ navigate }: { navigate: NavigateFn }) {
   return (
-    <div className="screen" style={{ paddingBottom: 24 }}>
+    <div className="screen bg-[white]" style={{ paddingBottom: 24 }}>
       <div style={{ padding: '0 16px' }}>
-        <div style={{ background: 'linear-gradient(135deg, var(--purple-light), white)', borderRadius: 20, padding: '20px', marginBottom: 16, border: '1px solid rgba(107,53,200,0.1)' }}>
+        <div style={{ background: 'none', borderRadius: 20, padding: '20px', marginBottom: 16, border: '1px solid rgba(107,53,200,0.1)' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 16 }}>
             <ScoreRing score={78} size={80} label="/100" />
             <div>
               <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.1em', color: 'var(--purple)' }}>SKIN HEALTH</div>
-              <h3 style={{ fontFamily: "'Playfair Display'", fontSize: 20, fontWeight: 700, margin: '4px 0 6px', color: 'var(--text)' }}>Improving steadily</h3>
-              <span style={{ fontSize: 12, fontWeight: 600, color: 'var(--green)', background: 'var(--green-bg)', padding: '3px 10px', borderRadius: 50 }}>+12% this month</span>
+              <h3 style={{ fontFamily: "'Playfair Display'", fontSize: 20, fontWeight: 500, margin: '4px 0 4px', color: 'var(--text)' }}>Improving Steadily</h3>
+              <span style={{ fontSize: 12, fontWeight: 600, color: 'green' }}>+12% Improvement this month</span>
             </div>
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 8 }}>
@@ -111,7 +113,7 @@ function SkinOverview({ navigate }: { navigate: NavigateFn }) {
               { label: 'Clarity', value: '70%', good: false },
             ].map(m => (
               <div key={m.label} style={{ textAlign: 'center', background: 'white', borderRadius: 12, padding: '10px 4px' }}>
-                <div style={{ fontWeight: 700, fontSize: 18, color: m.good ? 'var(--purple)' : 'var(--amber)' }}>{m.value}</div>
+                <div style={{ fontWeight: 700, fontSize: 18, color: m.good ? 'var(--purple)' : '#FFA000' }}>{m.value}</div>
                 <div style={{ fontSize: 11, color: 'var(--text-2)' }}>{m.label}</div>
               </div>
             ))}
@@ -178,11 +180,14 @@ function SkinProducts() {
             className="product-card-col"
             style={{ flex: 1, minWidth: 0, background: selected[groupKey] === i ? 'var(--purple-pale)' : 'white', border: `1.5px solid ${selected[groupKey] === i ? 'var(--purple)' : 'var(--border)'}`, borderRadius: 14, padding: '10px 8px', cursor: 'pointer' }}
           >
-            <TierBadge  tier={o.tier} />
-            <div style={{ height: 60, borderRadius: 10, overflow: 'hidden', marginTop: 8, marginBottom: 8, background: 'var(--bg)' }}>
-              <img src={o.img} alt={o.name} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+            <div className='w-full flex items-center justify-center'
+            >
+              <TierBadge  tier={o.tier} />
             </div>
-            <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--text)', marginBottom: 2 }}>{o.brand}</div>
+            <div style={{ height: 90, borderRadius: 10, overflow: 'hidden', marginTop: 8, marginBottom: 8, background: 'var(--bg)' }}>
+              <img src={o.img} alt={o.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+            </div>
+            <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)', marginBottom: 2 }}>{o.brand}</div>
             <div style={{ fontSize: 10, color: 'var(--text-2)', marginBottom: 6, lineHeight: 1.3 }}>{o.name}</div>
             <div style={{ fontWeight: 700, fontSize: 13, color: 'var(--text)' }}>{o.price}</div>
             <div style={{ fontSize: 10, color: 'var(--text-3)' }}>{o.size}</div>
@@ -238,7 +243,7 @@ function SkinMorning({ navigate }: { navigate: NavigateFn }) {
       <div style={{ padding: '0 16px' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 6 }}>
           <div>
-            <h2 style={{ fontFamily: "'Playfair Display'", fontSize: 26, fontWeight: 700, margin: '0 0 4px', color: 'var(--text)' }}>Morning Routine</h2>
+            <h2 style={{ fontFamily: "'Playfair Display'", fontSize: 26, fontWeight: 500, margin: '0 0 4px', color: 'var(--text)' }}>Morning Routine</h2>
             <p style={{ fontSize: 13, color: 'var(--text-2)', margin: 0 }}>Protect, hydrate and prepare your skin.</p>
           </div>
           <button style={{ background: 'none', border: '1px solid var(--border)', borderRadius: 50, padding: '6px 12px', fontSize: 12, color: 'var(--purple)', cursor: 'pointer', whiteSpace: 'nowrap', fontFamily: "'Inter', sans-serif" }}>Why this? ⓘ</button>
@@ -306,7 +311,7 @@ function SkinMorning({ navigate }: { navigate: NavigateFn }) {
                   </div>
                   {/* Right: selected pill + product name */}
                   <div style={{ flexShrink: 0, textAlign: 'right', maxWidth: 110 }}>
-                    <span style={{ display: 'inline-flex', alignItems: 'center', gap: 3, background: '#DCFCE7', color: '#16A34A', padding: '4px 10px', borderRadius: 50, fontSize: 10, fontWeight: 700, marginBottom: 4, whiteSpace: 'nowrap' }}>
+                    <span className='border-[1px] border-[#16A34A1a]' style={{ display: 'inline-flex', alignItems: 'center', gap: 3, background: 'none', color: '#16A34A', padding: '4px 10px', borderRadius: 50, fontSize: 10, fontWeight: 700, marginBottom: 4, whiteSpace: 'nowrap' }}>
                       Selected ✓
                     </span>
                     <div style={{ fontSize: 11, color: 'var(--text-2)', lineHeight: 1.3 }}>{step.product}</div>
@@ -365,11 +370,11 @@ function SkinAfternoon() {
         <AIInsight text="Your afternoon routine is minimal by design. Noyela keeps it simple so you actually do it." />
         <div style={{ marginTop: 16 }}>
           {[
-            { icon: '☀', step: 1, title: 'SPF Reapplication', desc: 'Reapply sunscreen every 2 hours outdoors.', product: 'Neutrogena Ultra Sheer SPF 50 — Spray for convenience' },
-            { icon: '💧', step: 2, title: 'Hydration Check', desc: 'Drink 500ml water and apply mist if needed.', product: 'Optional: Avène Thermal Spring Water Mist' },
+            { icon: <Sun strokeWidth={1} color='#6B35C8'/>, step: 1, title: 'SPF Reapplication', desc: 'Reapply sunscreen every 2 hours outdoors.', product: 'Neutrogena Ultra Sheer SPF 50 — Spray for convenience' },
+            { icon: <Droplets strokeWidth={1} color='#6B35C8'/>, step: 2, title: 'Hydration Check', desc: 'Drink 500ml water and apply mist if needed.', product: 'Optional: Avène Thermal Spring Water Mist' },
           ].map(s => (
             <div key={s.step} style={{ background: 'white', borderRadius: 16, padding: '14px 16px', marginBottom: 10, border: '1px solid var(--border)', display: 'flex', alignItems: 'center', gap: 12 }}>
-              <div style={{ width: 44, height: 44, borderRadius: 12, background: 'var(--purple-light)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 22, flexShrink: 0 }}>{s.icon}</div>
+              <div style={{ width: 44, height: 44, borderRadius: 12, background: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 22, flexShrink: 0, border: '1px solid rgba(107,53,200,0.15)' }}>{s.icon}</div>
               <div>
                 <div style={{ fontWeight: 700, fontSize: 14 }}>{s.title}</div>
                 <div style={{ fontSize: 12, color: 'var(--text-2)', marginBottom: 4 }}>{s.desc}</div>
@@ -454,7 +459,7 @@ export default function Skin({ screen, navigate, activeModule, onModuleChange, o
   return (
     <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
       {/* Plan header with subtitle */}
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 16px 8px', background: 'var(--bg)' }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 16px 8px', background: 'white' }}>
         <div style={{ width: 44 }}>
           <button onClick={onHamburger} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 4 }}>
             <svg width="22" height="16" viewBox="0 0 22 16" fill="none"><rect y="0" width="22" height="2" rx="1" fill="var(--text)" /><rect y="7" width="16" height="2" rx="1" fill="var(--text)" /><rect y="14" width="22" height="2" rx="1" fill="var(--text)" /></svg>
@@ -472,6 +477,10 @@ export default function Skin({ screen, navigate, activeModule, onModuleChange, o
         </div>
       </div>
       <ModuleTabs active={activeModule} onChange={m => { onModuleChange(m); navigate(`${m}-overview`) }} />
+        <div className=''>
+
+            <img src={SkinBanner} alt="" />
+        </div>
       <div style={{ display: 'flex', gap: 0, overflowX: 'auto', background: 'white', borderBottom: '1px solid var(--border)' }}>
         {SKIN_TABS.map(t => (
           <button key={t.id} onClick={() => setTab(t.id)} className={` feature-tab ${tab === t.id ? 'active' : ''}`} style={{ background: 'none', border: 'none', cursor: 'pointer', fontFamily: "'Inter', sans-serif" }}>
@@ -480,6 +489,7 @@ export default function Skin({ screen, navigate, activeModule, onModuleChange, o
           </button>
         ))}
       </div>
+      
       <div style={{ flex: 1, overflowY: 'auto' }}>
         <div style={{ padding: '16px 0 0' }}>
           {tab === 'overview' && <SkinOverview navigate={navigate} />}

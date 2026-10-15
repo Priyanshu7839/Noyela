@@ -26,7 +26,7 @@ export function NoyelaOrb({ size = 'md', pulse = false, className = '' }: {
         width: s, height: s, borderRadius: '50%', flexShrink: 0,
         background: 'radial-gradient(circle at 32% 28%, #D8C8F4 0%, #9B6DD4 42%, #5E28B8 100%)',
         display: 'flex', alignItems: 'center', justifyContent: 'center',
-        animation: pulse ? 'orb-pulse 2s ease-in-out infinite' : 'orb-breathe 3.5s ease-in-out infinite',
+        animation: pulse ? 'orb-pulse 1s ease-in-out infinite' : 'orb-breathe 3.5s ease-in-out infinite',
         cursor: 'pointer',
       }}
     >
@@ -123,14 +123,14 @@ export function BottomNav({ active, onNavigate, onOrb }: {
     { id: 'profile', label: 'Profile', icon: <ProfileIcon /> },
   ]
   return (
-    <div className="bottom-nav rounded-t-[50px] min-w-[430px]">
+    <div className="bottom-nav rounded-t-[50px] w-full ">
       {items.map(i => (
-        <button key={i.id} onClick={() => onNavigate(i.id)} className={`nav-item ${active === i.id ? 'active' : ''}`} style={{ background: 'none', border: 'none', cursor: 'pointer' }}>
+        <button  key={i.id} onClick={() => onNavigate(i.id)} className={`nav-item ${active === i.id ? 'active' : ''}`} style={{ background: 'none', border: 'none', cursor: 'pointer' }}>
           {i.icon}
           <span style={{ fontSize: 10, fontWeight: active === i.id ? 600 : 400 }}>{i.label}</span>
         </button>
       ))}
-      <button className='w-[50px]' onClick={onOrb} style={{ background: 'none', border: 'none', cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 3, marginTop: -50 }}>
+      <button className='w-fit  justify-center ' onClick={onOrb} style={{ background: 'none', border: 'none', cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 3, marginTop: -50,marginLeft:10 }}>
       {/* <Orb width={80} height={80}/> */}
       <NoyelaOrb size='md'/>
       </button>

@@ -1,7 +1,9 @@
 import { useState, useRef, useEffect } from 'react'
 import {  BackHeader, ChatBubble, BottomSheet } from '../components/ui'
 import { NoyelaOrb } from '../components/NoyelaOrb'
+import { captureImage } from '../lib/camera'
 type NavigateFn = (screen: string) => void
+type ChatMessage = { text: string; isUser: boolean; time: string; image?: string }
 
 const SUGGESTIONS = [
   { text: 'Review today\'s roadmap', screen: 'roadmap-today' },
@@ -10,7 +12,7 @@ const SUGGESTIONS = [
   { text: 'Check my progress', screen: 'progress' },
 ]
 
-const INITIAL_MESSAGES = [
+const INITIAL_MESSAGES: ChatMessage[] = [
   { text: "Good morning, Alex! How can I help you today?", isUser: false, time: '9:41 AM' },
 ]
 
@@ -21,22 +23,31 @@ const NOYELA_RESPONSES: Record<string, string> = {
   progress: "You're 35% through Phase 2 — Enhancement. Your biggest wins this month: skin texture (+12%), sleep consistency (+8%), and routine adherence (92%). Your next milestone is at 40%, which unlocks your personalized Phase 3 plan.",
 }
 
-export default function AskNoyela({ navigate }: { navigate: NavigateFn }) {
+export default function AskNoyela({ navigate, params = {} }: { navigate: NavigateFn; params?: Record<string, unknown> }) {
   const [messages, setMessages] = useState(INITIAL_MESSAGES)
   const [input, setInput] = useState('')
   const [isThinking, setIsThinking] = useState(false)
   const [showSheet, setShowSheet] = useState(false)
   const [hasChat, setHasChat] = useState(false)
   const bottomRef = useRef<HTMLDivElement>(null)
+  const initialImageHandled = useRef(false)
+
+  useEffect(() => {
+    const image = typeof params.initialImage === 'string' ? params.initialImage : undefined
+    if (!image || initialImageHandled.current) return
+    initialImageHandled.current = true
+    setHasChat(true)
+    setMessages(prev => [...prev, { text: 'Please analyse this photo.', isUser: true, time: 'Now', image }])
+  }, [params.initialImage])
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [messages, isThinking])
 
-  const sendMessage = (text: string) => {
+  const sendMessage = (text: string, image?: string) => {
     if (!text.trim()) return
     setHasChat(true)
-    setMessages(prev => [...prev, { text, isUser: true, time: '9:41 AM' }])
+    setMessages(prev => [...prev, { text, isUser: true, time: '9:41 AM', image }])
     setInput('')
     setIsThinking(true)
     setTimeout(() => {
@@ -50,13 +61,18 @@ export default function AskNoyela({ navigate }: { navigate: NavigateFn }) {
     }, 1500)
   }
 
+  const takePhoto = async () => {
+    const image = await captureImage()
+    if (!image) return
+    setShowSheet(false)
+    sendMessage('Please analyse this photo.', image.dataUrl)
+  }
+
   const SHEET_OPTIONS = [
-    { icon: '📷', label: 'Take Photo' },
-    { icon: '🖼', label: 'Upload Photo' },
-    { icon: '📄', label: 'Upload Report' },
-    { icon: '🎙', label: 'Voice Note' },
-    { icon: '🔍', label: 'Scan Product' },
-    { icon: '❤', label: 'Import Health Data' },
+    { icon: '📷', label: 'Take Photo', onClick: takePhoto },
+    { icon: '🔍', label: 'Scan Product', onClick: takePhoto },
+    { icon: '🎙', label: 'Voice Note', onClick: () => setShowSheet(false) },
+    { icon: '❤', label: 'Import Health Data', onClick: () => setShowSheet(false) },
   ]
 
   return (
@@ -95,13 +111,16 @@ export default function AskNoyela({ navigate }: { navigate: NavigateFn }) {
           </div>
         ) : (
           /* Active chat */
-          <div style={{ flex: 1, overflowY: 'auto', padding: '16px' }}>
+          <div className=' min-h-[80vh]' style={{ flex: 1, overflowY: 'auto', padding: '16px' }}>
             {/* Small orb in top-center */}
             <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 16 }}>
               <NoyelaOrb size="sm" />
             </div>
             {messages.map((m, i) => (
-              <ChatBubble key={i} text={m.text} isUser={m.isUser} time={m.time} />
+              <div key={i}>
+                <ChatBubble text={m.text} isUser={m.isUser} time={m.time} />
+                {m.image && <img src={m.image} alt="Captured for analysis" style={{ display: 'block', maxWidth: 220, maxHeight: 220, objectFit: 'cover', borderRadius: 16, margin: m.isUser ? '-4px 0 12px auto' : '-4px auto 12px 0' }} />}
+              </div>
             ))}
             {isThinking && (
               <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 10 }}>
@@ -145,7 +164,7 @@ export default function AskNoyela({ navigate }: { navigate: NavigateFn }) {
         <BottomSheet onClose={() => setShowSheet(false)} title="Add to conversation">
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
             {SHEET_OPTIONS.map(o => (
-              <button key={o.label} onClick={() => setShowSheet(false)} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '14px 16px', background: 'var(--bg)', borderRadius: 14, border: 'none', cursor: 'pointer', fontFamily: "'Inter', sans-serif", fontSize: 14, fontWeight: 500, color: 'var(--text)' }}>
+              <button key={o.label} onClick={() => void o.onClick()} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '14px 16px', background: 'var(--bg)', borderRadius: 14, border: 'none', cursor: 'pointer', fontFamily: "'Inter', sans-serif", fontSize: 14, fontWeight: 500, color: 'var(--text)' }}>
                 <span style={{ fontSize: 22 }}>{o.icon}</span>
                 {o.label}
               </button>

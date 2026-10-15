@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Noyela</string>
+    <string name="title_activity_main">Noyela</string>
+    <string name="package_name">com.noyela.app</string>
+    <string name="custom_url_scheme">com.noyela.app</string>
+</resources>
